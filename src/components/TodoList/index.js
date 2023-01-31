@@ -1,18 +1,16 @@
-import { Col, Row, Input, Button, Select, Tag } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { addTodo } from "../../redux/actions";
-import Todo from "../Todo";
-import { v4 as uuidv4 } from "uuid";
+import { Button, Col, Input, Row, Select, Tag } from "antd";
 import { useState } from "react";
-import { todoListSelector } from "../../redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { addTodo } from "../../redux/actions";
+import { todaysRemainingSelector } from "../../redux/selectors";
+import Todo from "../Todo";
 
 export default function TodoList() {
   const [todoName, setTodoName] = useState("");
   const [priority, setPriority] = useState("Medium");
 
-  const todoList = useSelector(todoListSelector);
-
-  console.log(todoList);
+  const todoList = useSelector(todaysRemainingSelector);
 
   const dispatch = useDispatch();
 
