@@ -45,5 +45,8 @@ export const todoListSlice = createSlice({
         currentTodo.completed = !currentTodo.completed;
       }
     },
+    removeTodo: (state, action) => {
+      return state.filter((item) => item.id !== action.payload);
+    },
   },
 });

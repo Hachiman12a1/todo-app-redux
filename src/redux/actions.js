@@ -12,6 +12,13 @@ export const toggleTodoStatus = (todoId) => {
   };
 };
 
+export const removeTodo = (todoId) => {
+  return {
+    type: "todoList/removeTodo",
+    payload: todoId,
+  };
+};
+
 export const searchFilterChange = (text) => {
   return {
     type: "filters/searchFilterChange",

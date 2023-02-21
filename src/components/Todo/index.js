@@ -1,4 +1,4 @@
-import { Row, Tag, Checkbox } from "antd";
+import { Row, Tag, Checkbox, Button } from "antd";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 // import { toggleTodoStatus } from "../../redux/actions";
@@ -19,6 +19,10 @@ export default function Todo({ name, priority, completed, id }) {
     dispatch(todoListSlice.actions.toggleTodoStatus(id));
   };
 
+  const handleDeleteTodo = () => {
+    dispatch(todoListSlice.actions.removeTodo(id));
+  };
+
   return (
     <Row
       justify="space-between"
@@ -33,6 +37,7 @@ export default function Todo({ name, priority, completed, id }) {
       <Tag color={priorityColorMapping[priority]} style={{ margin: 0 }}>
         {priority}
       </Tag>
+      <Button onClick={handleDeleteTodo}>X</Button>
     </Row>
   );
 }
