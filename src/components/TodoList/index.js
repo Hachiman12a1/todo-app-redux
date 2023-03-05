@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { todaysRemainingSelector } from "../../redux/selectors";
 import Todo from "../Todo";
 // import { addTodo } from "../../redux/actions";
-import { todoListSlice } from "./TodoSlice";
+import { addToDos, todoListSlice } from "./TodoSlice";
 
 export default function TodoList() {
   const [todoName, setTodoName] = useState("");
@@ -24,6 +24,14 @@ export default function TodoList() {
         completed: false,
       })
     );
+    // dispatch(
+    //   addToDos({
+    //     id: uuidv4(),
+    //     name: todoName,
+    //     priority: priority,
+    //     completed: false,
+    //   })
+    // );
     setTodoName("");
     setPriority("Medium");
   };

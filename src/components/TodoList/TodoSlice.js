@@ -26,15 +26,14 @@
 
 // Redux Toolkit
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const todoListSlice = createSlice({
   name: "todoList",
-  initialState: [
-    { id: 1, name: "Learn Yoga", completed: false, priority: "Medium" },
-    { id: 2, name: "Learn Redux", completed: true, priority: "High" },
-    { id: 3, name: "Learn JavaScript", completed: false, priority: "Low" },
-  ],
+  initialState: {
+    status: "idle",
+    todos: [],
+  },
   reducers: {
     addTodo: (state, action) => {
       state.push(action.payload);
@@ -49,4 +48,43 @@ export const todoListSlice = createSlice({
       return state.filter((item) => item.id !== action.payload);
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchTodos.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchTodos.fulfilled, (state, action) => {
+      console.log({ action });
+      state.status = "idle";
+      state.todos = action.payload;
+    });
+    builder.addCase(fetchTodos.rejected, (state, action) => {
+      state.status = "failed";
+    });
+  },
 });
+
+export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
+  const res = await fetch("/api/todos");
+  const data = await res.json();
+  return data.todos;
+});
+
+// => todos/fetchTodos/pending
+// => todos/fetchTodos/fullfilled
+// todos/fetchTodos/rejected
+
+// action (object) va action creators () => { return action }
+// thunk action (function) va thunk action creators () => { return thunk action  }
+
+// export function addToDos(todo) {
+//   //Thunk function - thunk action
+//   return function addTodosThunk(dispatch, getState) {
+//     console.log(getState());
+//     console.log({ todo });
+//     // custom
+//     todo.name = "Dat";
+//     dispatch(todoListSlice?.actions?.addTodo(todo));
+
+//     console.log(getState());
+//   };
+// }

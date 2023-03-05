@@ -54,3 +54,32 @@ export const filterSlice = createSlice({
     },
   },
 });
+
+/**
+ * => (payload) => {
+ *  return {
+ *    type: 'filters/searchFilterChange',
+ *    payload: payload
+ *  }
+ * }
+ *
+ *
+ *
+ * => {
+ *  reducers,
+ *  actions
+ * }
+ * action => object
+ *
+ * {
+ *  type: 'abc',
+ *  payload: value
+ * }
+ *
+ * action creator => function :  () => {
+ *  return {
+ *    type: 'abc',
+ *    payload: value
+ * }
+ * }
+ */
