@@ -49,15 +49,41 @@ export const todoListSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Get List Todos
     builder.addCase(fetchTodos.pending, (state, action) => {
       state.status = "loading";
     });
     builder.addCase(fetchTodos.fulfilled, (state, action) => {
-      console.log({ action });
       state.status = "idle";
       state.todos = action.payload;
     });
     builder.addCase(fetchTodos.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    // Add TODO
+    builder.addCase(addTodo.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(addTodo.fulfilled, (state, action) => {
+      state.status = "idle";
+      state.todos.push(action.payload);
+    });
+    builder.addCase(addTodo.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    // Update Todo
+    builder.addCase(updateTodo.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(updateTodo.fulfilled, (state, action) => {
+      state.status = "idle";
+
+      let currentTodo = state.todos.find((todo) => todo.id === action.payload);
+      currentTodo = action.payload;
+    });
+    builder.addCase(updateTodo.rejected, (state, action) => {
       state.status = "failed";
     });
   },
@@ -69,6 +95,24 @@ export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
   return data.todos;
 });
 
+export const addTodo = createAsyncThunk("todos/addTodo", async (todo) => {
+  const res = await fetch("/api/addTodo", {
+    method: "POST",
+    body: JSON.stringify(todo),
+  });
+  const data = await res.json();
+  return data.todos;
+});
+
+export const updateTodo = createAsyncThunk("todos/updateTodo", async (todo) => {
+  const res = await fetch("/api/updateTodo", {
+    method: "POST",
+    body: JSON.stringify(todo),
+  });
+  const data = await res.json();
+  return data.todos;
+});
+
 // => todos/fetchTodos/pending
 // => todos/fetchTodos/fullfilled
 // todos/fetchTodos/rejected
@@ -76,9 +120,9 @@ export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
 // action (object) va action creators () => { return action }
 // thunk action (function) va thunk action creators () => { return thunk action  }
 
-// export function addToDos(todo) {
+// export function addToDo(todo) {
 //   //Thunk function - thunk action
-//   return function addTodosThunk(dispatch, getState) {
+//   return function addTodoThunk(dispatch, getState) {
 //     console.log(getState());
 //     console.log({ todo });
 //     // custom
