@@ -54,7 +54,7 @@ export const todoListSlice = createSlice({
       state.status = "loading";
     });
     builder.addCase(fetchTodos.fulfilled, (state, action) => {
-      state.status = "idle";
+      state.status = "fetched";
       state.todos = action.payload;
     });
     builder.addCase(fetchTodos.rejected, (state, action) => {
@@ -66,7 +66,7 @@ export const todoListSlice = createSlice({
       state.status = "loading";
     });
     builder.addCase(addTodo.fulfilled, (state, action) => {
-      state.status = "idle";
+      state.status = "added";
       state.todos.push(action.payload);
     });
     builder.addCase(addTodo.rejected, (state, action) => {
@@ -78,12 +78,27 @@ export const todoListSlice = createSlice({
       state.status = "loading";
     });
     builder.addCase(updateTodo.fulfilled, (state, action) => {
-      state.status = "idle";
+      state.status = "updated";
 
       let currentTodo = state.todos.find((todo) => todo.id === action.payload);
       currentTodo = action.payload;
     });
     builder.addCase(updateTodo.rejected, (state, action) => {
+      state.status = "failed";
+    });
+
+    // Delete Todo
+    builder.addCase(deleteTodo.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(deleteTodo.fulfilled, (state, action) => {
+      state.status = "Deleted";
+
+      let restTodo = state.todos.filter((item) => item.id !== action.payload);
+
+      restTodo = action.payload;
+    });
+    builder.addCase(deleteTodo.rejected, (state, action) => {
       state.status = "failed";
     });
   },
@@ -107,6 +122,15 @@ export const addTodo = createAsyncThunk("todos/addTodo", async (todo) => {
 export const updateTodo = createAsyncThunk("todos/updateTodo", async (todo) => {
   const res = await fetch("/api/updateTodo", {
     method: "POST",
+    body: JSON.stringify(todo),
+  });
+  const data = await res.json();
+  return data.todos;
+});
+
+export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (todo) => {
+  const res = await fetch("/api/deleteTodo", {
+    method: "DELETE",
     body: JSON.stringify(todo),
   });
   const data = await res.json();

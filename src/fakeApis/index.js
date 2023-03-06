@@ -1,4 +1,4 @@
-import { createServer, Model } from "miragejs";
+import { createServer, Model, Response } from "miragejs";
 
 export const setupServer = () => {
   createServer({
@@ -24,6 +24,16 @@ export const setupServer = () => {
         currentTodo.update({ completed: !currentTodo.completed });
 
         return currentTodo;
+      });
+
+      this.delete("/api/deleteTodo", (schema, request) => {
+        const id = JSON.parse(request.requestBody);
+
+        const currentTodo = schema.todos.find(id);
+
+        currentTodo.destroy();
+
+        return schema.todos.all();
       });
     },
   });
