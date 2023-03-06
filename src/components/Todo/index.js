@@ -23,6 +23,7 @@ export default function Todo({ name, priority, completed, id }) {
     setChecked(!checked);
     // dispatch(todoListSlice.actions.toggleTodoStatus(id));
     dispatch(updateTodo(id));
+    dispatch(fetchTodos());
   };
 
   const handleDeleteTodo = () => {
